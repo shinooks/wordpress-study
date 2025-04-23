@@ -4,9 +4,9 @@
 
 ### 프로젝트 실행 방법
 1. vagrant 및 virtual box 설치
-2. git clone https://github.com/shinooks/wordpress-study`
+2. git clone `https://github.com/shinooks/wordpress-study`
 2. 작업 디렉터리를 `1. 단일서버 아키텍처`로 이동
-3. Vagrantfile에서 HOST_IF의 인터페이스명을 인터넷이 가능한 인터페이스로 지정 (ex. ens..., wlp... 등)
+3. Vagrantfile에서 `HOST_IF`의 인터페이스명을 인터넷이 가능한 인터페이스로 지정 (ex. ens..., wlp... 등)
 4. `vagrant up` 명령어로 가상머신 프로비저닝
 
 ```
