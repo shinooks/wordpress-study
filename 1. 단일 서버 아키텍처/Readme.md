@@ -118,3 +118,35 @@ end
     Location: http://localhost/wp-admin/install.php <- wordpress 초기 구성 페이지
     Content-Type: text/html; charset=UTF-8
     ```
+
+### 특이 사항 및 트러블 슈팅
+1. 설정 과정에서 DB 연결에 실패했던 사례
+    - 확인 결과 DB 생성 시 수동으로 생성하는 과정에서 사용자의 접속 위치를 localhost가 아닌 IP로 지정
+    - 해당 계정을 제거하고 **`'wp-user'@'localhost'`**으로 새로 구성하여 해결
+        
+        ```bash
+        SHOW GRANTS FOR 'wp-user'@'localhost';
+        ERROR 1141 (42000): There is no such grant defined for user 'wp-user' on host 'localhost'
+        mysql> SHOW GRANTS FOR 'wp-user'@'192.168.100.10';
+        +--------------------------------------------------------------------+
+        | Grants for wp-user@192.168.100.10                                   |
+        +--------------------------------------------------------------------+
+        | GRANT USAGE ON *.* TO `wp-user`@`192.168.100.10`                    |
+        | GRANT ALL PRIVILEGES ON `wordpress`.* TO `wp-user`@`192.168.100.10` |
+        +--------------------------------------------------------------------+
+        
+        ```
+        
+    - wordpress의 설정 상에서는 DB HOST 정보가 localhost가 되어 있어 DB 연결이 되지 않았음.
+2. 서비스 초기 구성에서 리포지터리 업데이트의 중요성이 크지 않아 과정을 생략
+    - 초기 구성 시 패키지 전체 업데이트를 포함할 경우 VM 초기 생성 시간이 300% 증가하는 것을 확인
+        - 미포함시: 3분 이내 / 포함 시: 9분 이상
+        
+        ```bash
+        wordpress: 레포지터리 Update...
+        						...
+        wordpress: real     6m38.827s
+        wordpress: user     3m58.054s
+        wordpress: sys      0m58.280s
+        ```
+        
