@@ -14,11 +14,12 @@
   💡 Wordpress를 활용하여 시스템 설계 방법에 대해 학습하고 점진적으로 고도화 하는 프로젝트
 </aside>
 
+---
 ## 2. 프로젝트 진행 방식
 
 1. 매일 시스템의 목표를 설정해 스터디
-    - 단일 서버부터 2티어 구조, 3티어 구조까지는 공통
-    - 현재 단계의 한계점과 다음 시스템 설계 목표로 공유
+    - 단일 서버부터 2티어 구조, 3티어 구조까지의 구성은 공통 과제
+    - 현재 구조의 한계점을 생각하고 다음 시스템 설계 목표로 공유
 2. 각자 시스템을 직접 구현하고 코드 기반으로 재구현이 가능한 방식으로 결과물 구성
     - 기술 스택을 Vagrant와 Virtualbox, Shell Script로 통일
     - 자신이 구성한 시스템을 Vagrantfile로 공유
@@ -28,38 +29,30 @@
 4. 프로젝트 진행 과정을 팀과 교환
     - 당일 6시부터는 자신이 진행한 프로젝트 진행 사항 및 결과를 구성원들과 교환
 
+---
 ## 3. 프로젝트 아키텍처 목표
 
 - 이 프로젝트는 WordPress를 기반으로 한 웹 시스템을 **점진적으로 고도화하는 과정**을 실습합니다.
 - 실무에서 필요한 **확장성, 안정성, 관리 효율성**을 고려한 시스템을 직접 설계하고 만들어보는 것을 목표로 합니다.
 - 단순한 설치에서 시작해, 점점 더 실제 운영 환경에 가까운 구조로 발전시키는 프로젝트입니다.
 
-## 4. 공통 목표
+### 공통 목표
 
-### 1. 단일서버 아키텍처 구성
-![image](https://github.com/user-attachments/assets/8ce2fb05-1238-45a8-8c6b-f58d02edd984)
+- 3-Tier 아키텍처 구성 (완료)
+  
+### 개별 고도화 목표
 
-### 2. 2-Tier 아키텍처 구성
-![image](https://github.com/user-attachments/assets/8b826291-8add-4b5b-867e-183d635493df)
+- 분산된 Wordpress 설정 동기화 (진행 중)
+- MySQL의 데이터를 분산 스토리지 저장 (진행 중)
+- MySQL 빠른 복구를 위한 레플리케이션 구성 (진행 중)
 
-### 3. 3-Tier 아키텍처 구성
-![image](https://github.com/user-attachments/assets/ee4ad8fb-e274-4413-a14c-93c68692b5ac)
-
-## 5. 개별 고도화 목표
 ---
-### 4. 분산된 Wordpress 설정 동기화
-![image](https://github.com/user-attachments/assets/27bfefde-ad80-4db1-8bc6-7777168ee2e9)
+## 현재까지의 프로젝트 구성 결과
+![image](https://github.com/user-attachments/assets/84ae75a0-13ac-4a59-98ee-ddce3644965a)
 
-
-### 5. MySQL의 데이터를 분산 스토리지 저장
-![image](https://github.com/user-attachments/assets/41a39757-25cf-4304-b24a-9c10d7ba9e1b)
-
-
-### 6. MySQL 빠른 복구를 위한 레플리케이션 구성
-![image](https://github.com/user-attachments/assets/96571d4f-6d1d-4103-86ff-627311b76ed5)
-
-
-## 프로젝트 링크
+---
+## 참고
+### 프로젝트 링크
 - [노션 공개페이지](https://www.notion.so/Wordpress-1de07373030f80e085f7e443927178f7)
 - 프로젝트 원본 링크
   - 퍼블릭: [3조 유자치즈케익](https://www.notion.so/3-1dc13e81f3ba80b0b0b1deb07cdc68c4?pvs=21) 
@@ -74,8 +67,7 @@
 
 - 새로운 시스템 구성을 추가할 때는 아래와 같이 진행해주세요.
 
-- architect/단계번호/기술스택 형식으로 새 디렉터리를 생성해주세요.
-  예) architect/3/nginx/, architect/3/haproxy/
+- 단계번호.구성목표/기술스택 형식으로 새 디렉터리를 생성해주세요.
 
 - 디렉터리에 필요한 파일을 넣고, 간단한 설명을 담은 README.md 파일도 작성해주세요.
   ```
@@ -94,8 +86,3 @@
   - 더 자세한 정리(노션, 블로그 등)가 있다면 링크도 공유해주세요.
   ```
 - 이미 디렉터리가 존재한다면, 기존 코드를 개선하거나, 해결되지 않은 문제 해결, 한계점을 제시하고 개선안 제시 등)를 통해 기여해주세요.
-
-
----
-
-
