@@ -1,5 +1,8 @@
 # 1. 단일서버 아키텍처
-### [단일서버 아키텍처 상세](https://blog.wooks-space.me/1-1de07373030f811e9940c6055bac6791?pvs=74)
+![image](https://github.com/user-attachments/assets/8ce2fb05-1238-45a8-8c6b-f58d02edd984)
+### [구현 설명 페이지](https://tinted-tapir-06c.notion.site/1-1de07373030f811e9940c6055bac6791?pvs=74)
+
+
 
 ### 시스템 구성 결과물
 ![단일서버 아키텍처 이미지](https://github.com/user-attachments/assets/61a67152-d2c8-4212-a03b-a6ffaad52e4a)
