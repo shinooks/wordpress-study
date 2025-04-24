@@ -36,6 +36,10 @@ echo 2. 방화벽 허용
 firewall-cmd --add-service=http --add-service=https --permanent
 firewall-cmd --reload
 
+if [ -d /var/www/html/wordpress/ ];
+then
+	echo Wordpress가 이미 설치되어 있습니다.;
+else
 echo 3. Wordpress 소스 코드 설치
 time (
 wget https://wordpress.org/latest.tar.gz -O wordpress.tar.gz
@@ -44,7 +48,7 @@ cp /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-confi
 )
 
 echo 4. apache 가상 호스팅 구성
-sudo tee -a /etc/httpd/conf.d/wordpress.conf<<EOF
+sudo tee -a /etc/httpd/conf.d/wordpress.conf<<APACHE_CONF
 <VirtualHost _default_:80>
     Servername cccr.com
     DocumentRoot /var/www/html/wordpress
@@ -53,7 +57,7 @@ sudo tee -a /etc/httpd/conf.d/wordpress.conf<<EOF
         AllowOverride ALL
     </Directory>
 </VirtualHost>
-EOF
+APACHE_CONF
 sudo systemctl enable httpd --now
 
 
@@ -61,14 +65,17 @@ echo 5. 워드프레스 설정 변경
 sed -i "s/define( 'DB_NAME', 'database_name_here' );/define( 'DB_NAME', '#{DB_NAME}' );/" "#{WP_CONFIG_FILE}"
 sed -i "s/define( 'DB_USER', 'username_here' );/define( 'DB_USER', '#{DB_USER}' );/" "#{WP_CONFIG_FILE}"
 sed -i "s/define( 'DB_PASSWORD', 'password_here' );/define( 'DB_PASSWORD', '#{DB_PASSWD}' );/" "#{WP_CONFIG_FILE}"
-# sed -i "s/define( 'DB_HOST', 'localhost' );/define( 'DB_HOST', '#{DB_HOST}' );/" "#{WP_CONFIG_FILE}"
+sed -i "s/define( 'DB_HOST', 'localhost' );/define( 'DB_HOST', '#{DB_HOST}' );/" "#{WP_CONFIG_FILE}"
 
-systemctl restart httpd
+systemctl restart httpd;
+fi
 
 echo 6. PHP to DB SELinux 접근제어 허용
 setsebool -P httpd_can_network_connect_db 1
 
-echo 접근제어 설정 확인: `getsebool |grep http_can_network_connect_db`
+echo output:
+echo "접근제어 설정 확인: `getsebool -a |grep httpd_can_network_connect_db` \n" \
+"ip address: `ip address show eth1`"
 SCRIPT
 
 ####################
@@ -84,7 +91,7 @@ time (
  
 echo 2. was 서버의 내부망 IP만 방화벽으로 허용
 firewall-cmd --add-rich-rule=\
-'rule family=ipv4 source address="#{WP_IP}}/32" \
+'rule family=ipv4 source address="#{WP_IP}/32" \
 service name=mysql accept' --permanent
 
 firewall-cmd --reload
@@ -102,10 +109,11 @@ SCRIPT
 
 Vagrant.configure("2") do |config|
   config.vm.synced_folder ".", "/vagrant", disabled: true
-  config.vm.network "public_network", bridge: "#{HOST_IF}"
-  config.vm.network "private_network"
+  config.vm.box = vm_image
+  
   config.vm.define "wordpress" do |node|
-    node.vm.box = vm_image
+    node.vm.network "public_network", bridge: "#{HOST_IF}"
+    node.vm.network "private_network", ip: "#{WP_IP}"
     node.vm.provider "virtualbox" do |vb|
       vb.name = "wordpress"
       vb.cpus = 2
@@ -116,13 +124,9 @@ Vagrant.configure("2") do |config|
     node.vm.provision "shell", inline: Common_install_script
     node.vm.provision "shell", inline: WAS_install_script
   end
-end
-
-Vagrant.configure("2") do |config2|
-  config2.vm.synced_folder ".", "/vagrant", disabled: true
-  config2.vm.network "private_network"
-  config2.vm.define "mysql" do |node|
-    node.vm.box = vm_image
+  
+  config.vm.define "mysql" do |node|
+    node.vm.network "private_network", ip: "#{DB_HOST}"
     node.vm.provider "virtualbox" do |vb|
       vb.name = "mysql"
       vb.cpus = 2
